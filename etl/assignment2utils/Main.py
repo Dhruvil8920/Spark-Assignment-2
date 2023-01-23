@@ -35,7 +35,6 @@ def TotalRepository():
 
 
 # Creating Dataframe
-
 def makeDf(spark, schema):
     dfA2 = spark.read.csv("E:/CLG/py/Spark-Assignment-2/dataset/ghtorrent-logs.txt", inferSchema=True, schema=schema)
     return dfA2
@@ -52,6 +51,7 @@ def ProperDf():
     return finalDF
 
 
+# Most HTTP request
 def MostHttpReq():
     finaldf = ProperDf()
     dfMostReq = finaldf.filter(finaldf.jobInfo.contains("request")).groupBy("id").count()
@@ -63,7 +63,7 @@ def MostHttpReq():
 
     return ans
 
-
+# Most failed HTTP request
 def failedRequest():
     finaldf = ProperDf()
     dfFailed = finaldf.filter(finaldf.jobInfo.contains("Failed")).groupBy("id").count().orderBy(col("count").desc())
@@ -72,7 +72,7 @@ def failedRequest():
         "maxFailedRequest"))
     return ans1
 
-
+# Most active hour of the day
 def ActiveHour():
     finaldf = ProperDf()
     df = finaldf.groupBy("time").count()
@@ -82,7 +82,7 @@ def ActiveHour():
 
     return df
 
-
+# Most active repository
 def MostActiveRepo():
     finaldf = ProperDf()
     df = finaldf.withColumn("MostActiveRepo", split(col("jobInfo"), " ").getItem(2))
